@@ -1,5 +1,6 @@
 ###
 # Sample code for activating and annotating basic camera
+# From https://projects.raspberrypi.org/en/projects/getting-started-with-picamera/8
 #
 ###
 
