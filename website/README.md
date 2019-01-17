@@ -19,4 +19,8 @@ Hot reloading dev server that serves up website at localhost:3000
 Apparently, can run as a static html+css+js website, or as a Node.js app with
 `npm run build && npm run start`.
 
-Read this and other stuff in docs about the rest: https://nextjs.org/docs/#static-html-export
+To export an html+css+js website:
+
+    npm run export
+
+See the out/ directory. It's git ignored. It will now have the static website.
