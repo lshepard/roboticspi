@@ -24,3 +24,8 @@ To export an html+css+js website:
     npm run export
 
 See the out/ directory. It's git ignored. It will now have the static website.
+
+To deploy whatever is in `out/` (this uses Google Firebase),
+
+    firebase deploy
+    # `firebase` is made available with the dev dependency firebase-tools
