@@ -1,10 +1,12 @@
 import * as firebase from "firebase";
 import "firebase/firestore";
+import "firebase/storage";
 
 const config = {
   apiKey: "AIzaSyCgrYOIYYrWwwVz6dzeMyEKDM5Tj50VLCk",
   authDomain: "the-chicago-machine.firebaseapp.com",
   databaseURL: "https://the-chicago-machine.firebaseio.com",
+  storageBucket: "the-chicago-machine.appspot.com",
   projectId: "the-chicago-machine"
 };
 
