@@ -1,44 +1,124 @@
-import firebase from "../lib/firebase";
-import { FirestoreProvider } from "react-firestore";
-import FileUploader from "react-firebase-file-uploader";
 import React from "react";
+import firebase from "../lib/firebase";
+import FileUploader from "react-firebase-file-uploader";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
+import { ToastProvider, ToastConsumer } from "react-awesome-toasts";
+import Head from "next/head";
+import {
+  FirestoreProvider,
+  FirestoreCollection,
+  withFirestore
+} from "react-firestore";
 
-function Soundboard() {
+function AudioFiles() {
   return (
     <>
-      <h1>Soundboard</h1>
-      <FileUploader
-        accept="audio/*"
-        name="audio"
-        randomizeFilename
-        storageRef={firebase
-          .storage()
-          .ref()
-          .child("audio")}
-        onUploadError={error => console.error(error)}
-        onUploadSuccess={filename => console.log(`\'${filename}\' uploaded!`)}
-        onProgress={progress => console.info(progress)}
+      <FirestoreCollection
+        path="audio_urls"
+        render={({ isLoading, data }) => {
+          return isLoading ? (
+            <>...</>
+          ) : (
+            <>
+              <div>
+                <h2>Uploaded Audio Files</h2>
+                {data.map(item => {
+                  return (
+                    <div className="card" key={Number(new Date())}>
+                      {item.filename} -- <audio controls src={item.url} />
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          );
+        }}
       />
     </>
   );
 }
 
-function Contents() {
+function Soundboard() {
+  const errorToast = {
+    text: "Upload Error",
+    ariaLabel: "File was not uploaded successfully. See console for more.",
+    actionText: "Ok"
+  };
+  const successToast = {
+    text: "Upload Success",
+    ariaLabel: "File was uploaded successfully!",
+    actionText: "Ok"
+  };
   return (
-    <FirestoreProvider firebase={firebase}>
-      <Soundboard />
-    </FirestoreProvider>
+    <div className="flex">
+      <h1>Soundboard</h1>
+      <ToastConsumer>
+        {({ show, hide }) => (
+          <>
+            <FileUploader
+              accept="audio/*"
+              name="audio"
+              storageRef={firebase
+                .storage()
+                .ref()
+                .child("audio")}
+              onUploadError={error => {
+                show({ ...errorToast, onActionClick: hide });
+                console.error(error);
+              }}
+              onUploadSuccess={filename => {
+                // so... firebase storage has NO API TO GET THE URLS
+                // so I literally add urls to the Firestore database...
+                firebase
+                  .storage()
+                  .ref()
+                  .child("audio")
+                  .child(filename)
+                  .getDownloadURL()
+                  .then(url =>
+                    firebase
+                      .app()
+                      .firestore()
+                      .collection("audio_urls")
+                      .doc(String(Number(new Date())))
+                      .set({ url: url, filename: filename })
+                  );
+                // show whether it succeeded to user
+                show({ ...successToast, onActionClick: hide });
+                console.log(`\'${filename}\' uploaded!`);
+              }}
+              onProgress={progress => console.info(progress)}
+              multiple
+            />
+            <AudioFiles />
+          </>
+        )}
+      </ToastConsumer>
+    </div>
   );
 }
 
-export default class SignInScreen extends React.Component {
+function Contents() {
+  return (
+    <ToastProvider>
+      <Head>
+        <title>The Chicago Machine -- Soundboard</title>
+        <link
+          href="https://cdn.jsdelivr.net/npm/picnic@6.5.0/picnic.min.css"
+          rel="stylesheet"
+        />
+      </Head>
+      <Soundboard />
+    </ToastProvider>
+  );
+}
+
+class SignInScreen extends React.Component {
   // The component's Local state.
   state = {
     isSignedIn: false // Local signed-in state.
   };
 
-  // Configure FirebaseUI.
   uiConfig = {
     // Popup signin flow rather than redirect flow.
     signInFlow: "popup",
@@ -91,3 +171,11 @@ export default class SignInScreen extends React.Component {
     );
   }
 }
+
+const WrappedSignInScreen = withFirestore(SignInScreen);
+
+export default () => (
+  <FirestoreProvider firebase={firebase}>
+    <WrappedSignInScreen />
+  </FirestoreProvider>
+);
