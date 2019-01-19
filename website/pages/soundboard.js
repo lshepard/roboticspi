@@ -146,7 +146,7 @@ class SignInScreen extends React.Component {
     if (!this.state.isSignedIn) {
       return (
         <div>
-          <h1>My App</h1>
+          <h1>The Chicago Machine</h1>
           <p>Please sign-in:</p>
           <StyledFirebaseAuth
             uiConfig={this.uiConfig}
@@ -157,7 +157,7 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        <h1>My App</h1>
+        <h1>The Chicago Machine</h1>
         <p>
           Welcome {firebase.auth().currentUser.displayName}! You are now
           signed-in!
