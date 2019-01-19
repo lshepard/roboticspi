@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec /home/pi/twstream live_141804579_mOYyFkICyroNUYR5QWPUVVVNHANwpo
