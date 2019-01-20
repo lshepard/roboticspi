@@ -36,7 +36,7 @@ class Voting extends React.Component {
                 .set({ label: "standard-vote-v2-mercy" })
             }
           >
-            Mercy (total: <VotesCount voteType="standard-vote-v2-mercy" />)
+            Mercy 😇 x <VotesCount voteType="standard-vote-v2-mercy" />
           </button>
           <button
             onClick={() =>
@@ -48,7 +48,7 @@ class Voting extends React.Component {
                 .set({ label: "standard-vote-v2-fun" })
             }
           >
-            Fun (total: <VotesCount voteType="standard-vote-v2-fun" />)
+            Fun 😂 x <VotesCount voteType="standard-vote-v2-fun" />
           </button>
           <button
             onClick={() =>
@@ -60,8 +60,8 @@ class Voting extends React.Component {
                 .set({ label: "standard-vote-v2-exterminate" })
             }
           >
-            Exterminate (total:{" "}
-            <VotesCount voteType="standard-vote-v2-exterminate" />)
+            Exterminate 🤖 x{" "}
+            <VotesCount voteType="standard-vote-v2-exterminate" />
           </button>
           <style jsx>{`
             button {
