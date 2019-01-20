@@ -1,6 +1,0 @@
-authtoken: 2AYfPXSSqBZHgQf3fE7Xi_6iyvhXkcvdCH9FA5UJHaF
-tunnels:
-  chicagomachine:
-    addr: 8080
-    proto: http
-    hostname: chicagomachine.ngrok.io
