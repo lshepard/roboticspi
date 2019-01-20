@@ -17,3 +17,7 @@ sudo systemctl enable twstream.service
 mkdir ~/.ngrok2
 cp ./ngrok.yml ~/.ngrok2/ngrok.yml
 
+# setup the port forwarder for port 8080 to chicagomachine.ngrok.io
+sudo cp ./ngrok.service /lib/systemd/system/ngrok.service
+sudo systemctl enable ngrok.service
+
