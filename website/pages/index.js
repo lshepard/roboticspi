@@ -53,15 +53,8 @@ function VideoFrame({ src }) {
       frameBorder="0"
       allowFullScreen={true}
       scrolling="no"
-      height="378"
-      width="620"
+      style={{ minHeight: 500 }}
     />
-  );
-}
-
-function CommentsFrame({ src }) {
-  return (
-    <iframe src={src} frameBorder="0" scrolling="no" height="500" width="100" />
   );
 }
 
@@ -95,9 +88,8 @@ function App() {
       >
         <center>The Chicago Machine</center>
       </h1>
-      <div className="flex two">
+      <div className="flex center">
         <VideoFrame src="https://player.twitch.tv/?channel=slurpylizard" />
-        <CommentsFrame src="https://www.twitch.tv/embed/slurpylizard/chat" />
       </div>
       <Voting />
     </div>
