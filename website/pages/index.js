@@ -3,12 +3,16 @@ import Head from "../components/head";
 import firebase from "../lib/firebase";
 import { FirestoreProvider, FirestoreCollection } from "react-firestore";
 
-function VotesCount() {
+function VotesCount({ voteType }) {
   return (
     <FirestoreCollection
       path="votes"
       render={({ isLoading, data }) => {
-        return isLoading ? <>...</> : <>{data.length}</>;
+        return isLoading ? (
+          <>...</>
+        ) : (
+          <>{data.filter(vote => vote.label === voteType).length}</>
+        );
       }}
     />
   );
@@ -18,28 +22,54 @@ class Voting extends React.Component {
   render() {
     return (
       <>
-        <div className="flex">
+        <h2>
+          <center>Vote:</center>
+        </h2>
+        <div className="flex three center">
           <button
-            className="success"
-            style={{ textTransform: "uppercase" }}
             onClick={() =>
               firebase
                 .app()
                 .firestore()
                 .collection("votes")
                 .doc(String(Number(new Date())))
-                .set({ label: "standard-vote-v1" })
+                .set({ label: "standard-vote-v2-mercy" })
             }
           >
-            Vote for The Chicago Machine
+            Mercy (total: <VotesCount voteType="standard-vote-v2-mercy" />)
           </button>
-        </div>
-        <div className="flex">
-          <div style={{ textAlign: "center", marginTop: 20 }}>
-            <h3>
-              Total Votes: <VotesCount />
-            </h3>
-          </div>
+          <button
+            onClick={() =>
+              firebase
+                .app()
+                .firestore()
+                .collection("votes")
+                .doc(String(Number(new Date())))
+                .set({ label: "standard-vote-v2-fun" })
+            }
+          >
+            Fun (total: <VotesCount voteType="standard-vote-v2-fun" />)
+          </button>
+          <button
+            onClick={() =>
+              firebase
+                .app()
+                .firestore()
+                .collection("votes")
+                .doc(String(Number(new Date())))
+                .set({ label: "standard-vote-v2-exterminate" })
+            }
+          >
+            Exterminate (total:{" "}
+            <VotesCount voteType="standard-vote-v2-exterminate" />)
+          </button>
+          <style jsx>{`
+            button {
+              color: #eb3323;
+              background-color: #fff;
+              margin: 5px;
+            }
+          `}</style>
         </div>
       </>
     );
