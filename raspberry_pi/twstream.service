@@ -3,7 +3,7 @@ Description=Twitch Stream Service
 After=network.target
 
 [Service]
-ExecStart=/bin/bash start_tw_stream
+ExecStart=/home/pi/start_tw_stream
 WorkingDirectory=/home/pi
 StandardOutput=inherit
 StandardInput=inherit
