@@ -5,23 +5,28 @@ import time
 import os
 
 taunts = [
-        "i smell invalid signatures",
-        "i got a golden senate seat for ya",
-        "special interest money is delicious",
-        "i totally was not involved with Ed Burke",
+        "I smell invalid signatures!",
+        "I got a golden senate seat for ya!",
+        "Special interest money is delicious!",
+        "I totally did not take Ed Burkes money.",
+        "beep boop bop",
+        "call me if you need a city job",
+        "why fight me when you can join me",
+        "is this line wiretapped?",
+        "extortion goes so well elections"
         ]
 
 
-previous_few_indices = [0, 1]
+prev = [0, 1]
 
 def next_index():
     """minimizing immediate repeats while being loose and 
     somewhat random otherwise"""
     random_index = 0
-    while random_index in previous_few_indices:
+    while random_index in prev:
         random_index = r.randint(0, len(taunts) - 1)
-    previous_few_indices[0] = previous_few_indices[1]
-    previous_few_indices[1] = random_index
+    prev[0] = prev[1]
+    prev[1] = random_index
     return random_index
 
 
