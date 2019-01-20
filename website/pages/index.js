@@ -101,6 +101,28 @@ function App() {
         </div>
         <Voting />
       </div>
+      <div className="flex footer">
+        <span>
+          made by&nbsp;
+          <a href="https://twitter.com/@gnarmis">@gnarmis</a>&nbsp;and&nbsp;
+          <a href="https://twitter.com/@lukeshepard">@lukeshepard</a>
+        </span>
+      </div>
+      <style jsx>{`
+        .footer {
+          font-family: Arial, sans-serif;
+          font-size: 16px;
+          width: 100%;
+          text-align: center;
+          z-index: -10;
+          color: #eee;
+          margin-top: 60px;
+        }
+        a {
+          color: #eee;
+          text-decoration: underline;
+        }
+      `}</style>
       <style jsx>{`
         .App {
           padding: 2%;
