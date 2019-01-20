@@ -1,5 +1,5 @@
 import React from "react";
-import Head from "../components/head";
+import Meta from "../components/meta";
 import firebase from "../lib/firebase";
 import { FirestoreProvider, FirestoreCollection } from "react-firestore";
 
@@ -91,7 +91,7 @@ function VideoFrame({ src }) {
 function App() {
   return (
     <>
-      <Head />
+      <Meta />
       <div className="App flex">
         <h1 className="MainHeading">
           <center>The Chicago Machine</center>

@@ -3,7 +3,7 @@ import firebase from "../lib/firebase";
 import FileUploader from "react-firebase-file-uploader";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { ToastProvider, ToastConsumer } from "react-awesome-toasts";
-import Head from "../components/head";
+import Meta from "../components/meta";
 import {
   FirestoreProvider,
   FirestoreCollection,
@@ -139,7 +139,7 @@ class SignInScreen extends React.Component {
     if (!this.state.isSignedIn) {
       return (
         <div>
-          <Head />
+          <Meta />
           <h1>The Chicago Machine</h1>
           <p>Please sign-in:</p>
           <StyledFirebaseAuth
@@ -151,7 +151,7 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
-        <Head />
+        <Meta />
         <h1>The Chicago Machine</h1>
         <p>
           Welcome {firebase.auth().currentUser.displayName}! You are now
