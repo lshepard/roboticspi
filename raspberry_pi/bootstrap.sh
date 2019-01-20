@@ -8,9 +8,6 @@ sudo apt-get install -y libav-tools espeak
 cp ./twstream /home/pi/twstream
 cp ./start_tw_stream /home/pi/start_tw_stream
 
-# move audio files in place
-cp ./slot_machine.wav /home/pi/slot_machine.wav
-
 # setup systemd service
 sudo cp ./twstream.service /lib/systemd/system/twstream.service
 # set the service to start on boot
@@ -26,6 +23,10 @@ sudo systemctl enable twstream.service
 
 # move speech in place
 cp ./speech /home/pi/speech
+# move randomized taunt generator into place too
+cp ./taunt /home/pi/taunt
+# move audio files in place, since they're also speech related
+cp ./slot_machine.wav /home/pi/slot_machine.wav
 
 
 # setup systemd service
