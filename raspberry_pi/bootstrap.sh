@@ -13,3 +13,7 @@ sudo cp ./twstream.service /lib/systemd/system/twstream.service
 # set the service to start on boot
 sudo systemctl enable twstream.service
 
+# setup ngrok auth and config
+mkdir ~/.ngrok2
+cp ./ngrok.yml ~/.ngrok2/ngrok.yml
+
