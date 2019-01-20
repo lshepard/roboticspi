@@ -2,11 +2,14 @@
 
 # install dependencies
 sudo apt-get update
-sudo apt-get install -y libav-tools
+sudo apt-get install -y libav-tools espeak
 
 # move streaming command to PATH
 cp ./twstream /home/pi/twstream
 cp ./start_tw_stream /home/pi/start_tw_stream
+
+# move audio files in place
+cp ./slot_machine.wav /home/pi/slot_machine.wav
 
 # setup systemd service
 sudo cp ./twstream.service /lib/systemd/system/twstream.service
@@ -21,3 +24,11 @@ sudo systemctl enable twstream.service
 #sudo cp ./ngrok.service /lib/systemd/system/ngrok.service
 #sudo systemctl enable ngrok.service
 
+# move speech in place
+cp ./speech /home/pi/speech
+
+
+# setup systemd service
+sudo cp ./speech.service /lib/systemd/system/speech.service
+# set the service to start on boot
+sudo systemctl enable speech.service
