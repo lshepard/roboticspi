@@ -7,7 +7,6 @@ ExecStart=/home/pi/speech
 WorkingDirectory=/home/pi
 StandardOutput=inherit
 StandardInput=inherit
-Restart=always
 User=pi
 
 [Install]
