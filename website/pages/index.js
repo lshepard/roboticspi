@@ -1,5 +1,5 @@
 import React from "react";
-import Head from "next/head";
+import Head from "../components/head";
 import firebase from "../lib/firebase";
 import { FirestoreProvider, FirestoreCollection } from "react-firestore";
 
@@ -60,39 +60,30 @@ function VideoFrame({ src }) {
 
 function App() {
   return (
-    <div
-      className="flex"
-      style={{
-        backgroundColor: "#bbdcf0",
-        color: "#000",
-        height: "100%",
-        width: "100%",
-        padding: "2%",
-        position: "absolute"
-      }}
-    >
-      <Head>
-        <title>The Chicago Machine</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/picnic@6.5.0/picnic.min.css"
-          rel="stylesheet"
-        />
-      </Head>
-      <h1
-        style={{
-          textShadow:
-            "3px 3px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff",
-          fontSize: 48,
-          color: "#eb3323"
-        }}
-      >
-        <center>The Chicago Machine</center>
-      </h1>
-      <div className="flex center">
-        <VideoFrame src="https://player.twitch.tv/?channel=slurpylizard" />
+    <>
+      <Head />
+      <div className="App flex">
+        <h1 className="MainHeading">
+          <center>The Chicago Machine</center>
+        </h1>
+        <div className="flex center">
+          <VideoFrame src="https://player.twitch.tv/?channel=slurpylizard" />
+        </div>
+        <Voting />
       </div>
-      <Voting />
-    </div>
+      <style jsx>{`
+        .App {
+          padding: 2%;
+        }
+
+        .MainHeading {
+          text-shadow: 3px 3px 0 #fff, -1px -1px 0 #fff, 1px -1px 0 #fff,
+            -1px 1px 0 #fff, 1px 1px 0 #fff;
+          font-size: 48;
+          color: #eb3323;
+        }
+      `}</style>
+    </>
   );
 }
 

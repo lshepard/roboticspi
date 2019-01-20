@@ -3,7 +3,7 @@ import firebase from "../lib/firebase";
 import FileUploader from "react-firebase-file-uploader";
 import StyledFirebaseAuth from "react-firebaseui/StyledFirebaseAuth";
 import { ToastProvider, ToastConsumer } from "react-awesome-toasts";
-import Head from "next/head";
+import Head from "../components/head";
 import {
   FirestoreProvider,
   FirestoreCollection,
@@ -101,13 +101,6 @@ function Soundboard() {
 function Contents() {
   return (
     <ToastProvider>
-      <Head>
-        <title>The Chicago Machine -- Soundboard</title>
-        <link
-          href="https://cdn.jsdelivr.net/npm/picnic@6.5.0/picnic.min.css"
-          rel="stylesheet"
-        />
-      </Head>
       <Soundboard />
     </ToastProvider>
   );
@@ -146,6 +139,7 @@ class SignInScreen extends React.Component {
     if (!this.state.isSignedIn) {
       return (
         <div>
+          <Head />
           <h1>The Chicago Machine</h1>
           <p>Please sign-in:</p>
           <StyledFirebaseAuth
@@ -157,6 +151,7 @@ class SignInScreen extends React.Component {
     }
     return (
       <div>
+        <Head />
         <h1>The Chicago Machine</h1>
         <p>
           Welcome {firebase.auth().currentUser.displayName}! You are now
