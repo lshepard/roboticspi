@@ -4,6 +4,8 @@ from io import BytesIO
 from PIL import Image
 import numpy as np
 from time import sleep
+from picamera.streams import PiCameraCircularIO
+from picamera.array import PiRGBArray
 
 kit = MotorKit()
 
@@ -27,51 +29,39 @@ RESOLUTION_x = 320
 RESOLUTION_y = 240
 THRESHOLD = 5
 
-def current_green(camera_stream):
+def current_green(camera, stream):
     """Get the current average green value"""
-    with camera_stream.condition:
-        camera_stream.condition.wait()
-        frame = camera_stream.frame
+    frame = b''
+    while len(frame) == 0:
+        #frameinfo = next(iter(stream.frames), None)
+        frame = stream.getvalue()
+        print("waiting")
+        camera.wait_recording(.1)
+        
+    print(f"frame found {frame[:100]}")
 
         # capture directly, not from stream
-        #        frame = np.empty((RESOLUTION_y,RESOLUTION_x,3),dtype=np.uint8)
+        #        
         #        camera.capture(frame,'rgb')
         
-        return green(frame)
+    return green(frame)
     
 def green(x):
     """Take the average value of the green channel minus the red channel"""
     
     return np.mean(np.mean(x[:,:,1].astype(int) - x[:,:,0].astype(int), axis=1))
 
-class StreamingOutput(object):
-    def __init__(self):
-        self.frame = None
-        self.buffer = io.BytesIO()
-        self.condition = Condition()
-
-    def write(self, buf):
-        if buf.startswith(b'\xff\xd8'):
-            # New frame, copy the existing buffer's content and notify all
-            # clients it's available
-            self.buffer.truncate()
-            with self.condition:
-                self.frame = self.buffer.getvalue()
-                self.condition.notify_all()
-            self.buffer.seek(0)
-        return self.buffer.write(buf)
-
-
 def monitor_green():
 
     direction = .5
     with setup_camera() as camera:
-        camera_stream = StreamingOutput()
-        camera.start_recording(camera_stream, format="mjpeg")
-        
-        try:
-            while(True):
-                g = current_green(camera_stream)
+        try: 
+#            raw = PiRGBArray(camera, size=(RESOLUTION_x,RESOLUTION_y))
+#            camera.start_recording()
+            frame = np.empty((RESOLUTION_y,RESOLUTION_x,3),dtype=np.uint8)
+            for frame in camera.capture_continuous(frame, format="rgb"):#, use_video_port=True):
+                g = green(frame)
+                raw.truncate(0)
                 print(g)
                 if g > THRESHOLD:
                     straight(0)
