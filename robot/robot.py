@@ -57,17 +57,17 @@ def monitor_green():
     with setup_camera() as camera:
         try: 
 #            raw = PiRGBArray(camera, size=(RESOLUTION_x,RESOLUTION_y))
-#            camera.start_recording()
+            camera.start_preview()
             frame = np.empty((RESOLUTION_y,RESOLUTION_x,3),dtype=np.uint8)
-            for frame in camera.capture_continuous(frame, format="rgb"):#, use_video_port=True):
+            for frame in camera.capture_continuous(frame, format="rgb", use_video_port=True):
                 g = green(frame)
-                raw.truncate(0)
+#                raw.truncate(0)
                 print(g)
-                if g > THRESHOLD:
-                    straight(0)
-                    sleep(1)
-                    direction *= -1
-                    
+                if g < THRESHOLD:
                     straight(direction)
+                else:
+                    stop()
+                    return
+                    
         finally:
             camera.stop_recording()
