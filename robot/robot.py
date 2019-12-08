@@ -6,15 +6,35 @@ import numpy as np
 from time import sleep
 from picamera.streams import PiCameraCircularIO
 from picamera.array import PiRGBArray
+import keyboard
 
 kit = MotorKit()
+
+current_key = None
+
+def onkey(event):
+    """Write the currently pressed key to global var for interpretation in the event loop"""
+    if event.event_type == "up":
+        current_key = None
+    elif event.event_type == "down":
+        current_key = event.name
+
+        
 
 def straight(speed):
     kit.motor1.throttle = speed
     kit.motor2.throttle = speed
     kit.motor3.throttle = speed
     kit.motor4.throttle = speed
-    
+
+def turn_right(speed):
+    """Determines motor speed based on the input."""
+
+    kit.motor1.throttle = speed 
+    kit.motor3.throttle = speed 
+    kit.motor1.throttle = -1 * speed
+    kit.motor3.throttle = -1 * speed
+
 def stop():
     straight(0)
     
@@ -60,14 +80,34 @@ def monitor_green():
             camera.start_preview()
             frame = np.empty((RESOLUTION_y,RESOLUTION_x,3),dtype=np.uint8)
             for frame in camera.capture_continuous(frame, format="rgb", use_video_port=True):
+
+                # This is the main event loop. We have a new green frame each time.
+                
                 g = green(frame)
-#                raw.truncate(0)
-                print(g)
-                if g < THRESHOLD:
-                    straight(direction)
+
+                if current_key is not None:
+                    # If there's a key pressed, then that overrides
+
+                    if current_key == "up":
+                        straight(1)
+                    elif current_key == "down":
+                        straight(-1)
+                    elif current_key == "right":
+                        turn_right(1)
+                    elif current_key == "left":
+                        turn_right(-1)
+                    elif current_key == "space":
+                        straight(0)
+                    
+
                 else:
-                    stop()
-                    return
+                    # maybe handle the color?
+
+                    #if g < THRESHOLD:
+                    #    straight(direction)
+                    #else:
+                    #    stop()
+                    #    return
                     
         finally:
             camera.stop_recording()
