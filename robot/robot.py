@@ -10,17 +10,33 @@ import keyboard
 
 kit = MotorKit()
 
-current_key = None
+class Key():
+    def __init__(self):
+        self.key = None
+        
+    def set(self, k):
+        self.key = k
+    
+current_key = Key()
 
 def onkey(event):
     """Write the currently pressed key to global var for interpretation in the event loop"""
     if event.event_type == "up":
-        current_key = None
+        current_key.set(None)
     elif event.event_type == "down":
-        current_key = event.name
+        current_key.set(event.name)
 
+keyboard.hook(onkey)        
         
 
+
+def motors(right, left):
+    kit.motor1.throttle = right
+    kit.motor3.throttle = right
+    
+    kit.motor2.throttle = left
+    kit.motor4.throttle = left
+    
 def straight(speed):
     kit.motor1.throttle = speed
     kit.motor2.throttle = speed
@@ -35,9 +51,6 @@ def turn_right(speed):
     kit.motor1.throttle = -1 * speed
     kit.motor3.throttle = -1 * speed
 
-def stop():
-    straight(0)
-    
 def setup_camera():
     camera = PiCamera()
     camera.framerate = 24
@@ -57,6 +70,7 @@ def current_green(camera, stream):
         frame = stream.getvalue()
         print("waiting")
         camera.wait_recording(.1)
+        eval_keyboard()
         
     print(f"frame found {frame[:100]}")
 
@@ -71,43 +85,37 @@ def green(x):
     
     return np.mean(np.mean(x[:,:,1].astype(int) - x[:,:,0].astype(int), axis=1))
 
-def monitor_green():
 
-    direction = .5
-    with setup_camera() as camera:
-        try: 
-#            raw = PiRGBArray(camera, size=(RESOLUTION_x,RESOLUTION_y))
-            camera.start_preview()
-            frame = np.empty((RESOLUTION_y,RESOLUTION_x,3),dtype=np.uint8)
-            for frame in camera.capture_continuous(frame, format="rgb", use_video_port=True):
-
-                # This is the main event loop. We have a new green frame each time.
-                
-                g = green(frame)
-
-                if current_key is not None:
-                    # If there's a key pressed, then that overrides
-
-                    if current_key == "up":
-                        straight(1)
-                    elif current_key == "down":
-                        straight(-1)
-                    elif current_key == "right":
-                        turn_right(1)
-                    elif current_key == "left":
-                        turn_right(-1)
-                    elif current_key == "space":
-                        straight(0)
-                    
-
-                else:
-                    # maybe handle the color?
-
-                    #if g < THRESHOLD:
-                    #    straight(direction)
-                    #else:
-                    #    stop()
-                    #    return
-                    
-        finally:
-            camera.stop_recording()
+def keyboard_loop():
+    speed = 0.0
+    direction = 0.5
+    
+    while True:
+        eval_keyboard()
+        
+def eval_keyboard():
+        k = current_key.key
+        if k is None:
+            return False
+            #print("none")
+        else:
+            # If there's a key pressed, then that overrides
+            if k == "up":
+                motors(1,1)
+            elif k == "down":
+                motors(-1,-1)
+            elif k == "right":
+                motors(-1,1)
+            elif k == "left":
+                motors(1,-1)
+            elif k == "space":
+                motors(0,0)
+            elif k == "g":
+                monitor_green()
+            return True
+        # now go
+            
+            
+if __name__ == "__main__":
+    # start the keyboard loop at the top
+    keyboard_loop()
